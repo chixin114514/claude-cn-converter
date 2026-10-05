@@ -127,24 +127,4 @@ export const register: Register = (on) => {
         })
   })
 
-  on('ui.render', { component: 'UserMessage' }, ($, event, next) => {
-    if (typeof event.props.text !== 'string') {
-      return next(event)
-    }
-
-    const converted = convertMarkdownAware(
-      event.props.text,
-      toMainlandSimplified,
-    )
-
-    return converted === event.props.text
-      ? next(event)
-      : next({
-          ...event,
-          props: {
-            ...event.props,
-            text: converted,
-          },
-        })
-  })
 }
