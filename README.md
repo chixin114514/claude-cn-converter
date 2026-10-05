@@ -91,21 +91,21 @@ claude plugin install cn-converter@chixin-plugins
 
 安装完成后无需额外命令，转换会自动生效。
 
-插件提供本地自检命令：
+插件提供确定性的本地自检。直接在普通输入框输入：
 
 ```text
-/cn-converter
+cn-converter-test
 ```
 
-正常情况下会看到类似：
+不要加 `/`。如果 Function Hook 已经加载，这条文本不会发送给 Claude 模型，而是直接返回：
 
 ```text
-Claude CN Converter 1.0.2 loaded
+Claude CN Converter 1.0.3 loaded
 S → TW: 憂鬱的烏龜；軟體；網路連線；程式碼
 TW → S: 忧郁的乌龟；软件；网络连接；代码
 ```
 
-这个命令完全在插件本地执行，不经过 Claude 模型，因此比让模型“逐字复述”更适合判断插件是否真正加载。
+如果 Claude 把 `cn-converter-test` 当成普通问题回答，则说明 Function Hook 没有加载。
 
 ### 更新已安装插件
 
