@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "chixin-plugins",
+  "version": "1.0.0",
+  "description": "Claude Code plugins by chixin114514",
+  "owner": {
+    "name": "chixin114514"
+  },
+  "plugins": [
+    {
+      "name": "cn-converter",
+      "description": "Automatically send Simplified Chinese prompts as Taiwan Traditional Chinese and render Claude replies as Mainland Simplified Chinese.",
+      "source": "./plugins/cn-converter",
+      "category": "productivity"
+    }
+  ]
+}
