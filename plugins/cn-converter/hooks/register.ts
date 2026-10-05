@@ -1,17 +1,7 @@
 import type { Register } from 'claude-code'
-import OpenCC from 'opencc-js'
+import { toMainlandSimplified, toTaiwanTraditional } from './opencc'
 
 type Converter = (text: string) => string
-
-const toTraditional = OpenCC.Converter({
-  from: 'cn',
-  to: 'twp',
-})
-
-const toSimplified = OpenCC.Converter({
-  from: 'twp',
-  to: 'cn',
-})
 
 function convertInlineCodeAware(line: string, convert: Converter): string {
   let output = ''
@@ -36,8 +26,8 @@ function convertInlineCodeAware(line: string, convert: Converter): string {
     const closing = line.indexOf(delimiter, tickEnd)
 
     if (closing === -1) {
-      // Unclosed inline code: preserve the remainder rather than risk
-      // modifying a command, path, identifier, or source fragment.
+      // Preserve an unclosed code span instead of risking changes to
+      // commands, paths, identifiers, or source fragments.
       output += line.slice(tickStart)
       break
     }
@@ -90,21 +80,16 @@ function convertMarkdownAware(text: string, convert: Converter): string {
 
 export const register: Register = (on) => {
   on('prompt.submit', ($, event, next) => {
-    // Avoid touching prompts generated internally by another plugin.
-    if (event.origin?.kind === 'plugin') {
+    // Do not rewrite prompts generated internally by another plugin.
+    if (event.origin.kind === 'plugin') {
       return next(event)
     }
 
-    const converted = convertMarkdownAware(event.text, toTraditional)
+    const converted = convertMarkdownAware(event.text, toTaiwanTraditional)
 
-    if (converted === event.text) {
-      return next(event)
-    }
-
-    return next({
-      ...event,
-      text: converted,
-    })
+    return converted === event.text
+      ? next(event)
+      : next({ ...event, text: converted })
   })
 
   on('ui.render', { component: 'AssistantMessage' }, ($, event, next) => {
@@ -112,19 +97,20 @@ export const register: Register = (on) => {
       return next(event)
     }
 
-    const converted = convertMarkdownAware(event.props.text, toSimplified)
+    const converted = convertMarkdownAware(
+      event.props.text,
+      toMainlandSimplified,
+    )
 
-    if (converted === event.props.text) {
-      return next(event)
-    }
-
-    return next({
-      ...event,
-      props: {
-        ...event.props,
-        text: converted,
-      },
-    })
+    return converted === event.props.text
+      ? next(event)
+      : next({
+          ...event,
+          props: {
+            ...event.props,
+            text: converted,
+          },
+        })
   })
 
   on('ui.render', { component: 'UserMessage' }, ($, event, next) => {
@@ -132,18 +118,19 @@ export const register: Register = (on) => {
       return next(event)
     }
 
-    const converted = convertMarkdownAware(event.props.text, toSimplified)
+    const converted = convertMarkdownAware(
+      event.props.text,
+      toMainlandSimplified,
+    )
 
-    if (converted === event.props.text) {
-      return next(event)
-    }
-
-    return next({
-      ...event,
-      props: {
-        ...event.props,
-        text: converted,
-      },
-    })
+    return converted === event.props.text
+      ? next(event)
+      : next({
+          ...event,
+          props: {
+            ...event.props,
+            text: converted,
+          },
+        })
   })
 }
