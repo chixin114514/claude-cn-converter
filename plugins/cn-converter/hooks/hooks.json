@@ -1,0 +1,6 @@
+{
+  "description": "Rewrite submitted prompts and rendered messages between Simplified and Taiwan Traditional Chinese.",
+  "modules": [
+    "./register.ts"
+  ]
+}
