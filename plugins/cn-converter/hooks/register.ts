@@ -93,7 +93,7 @@ export const register: Register = (on) => {
 
       return {
         drop:
-          'Claude CN Converter 1.0.3 loaded\n' +
+          'Claude CN Converter 1.0.4 loaded\n' +
           'S → TW: ' + traditional + '\n' +
           'TW → S: ' + roundTrip,
       }
