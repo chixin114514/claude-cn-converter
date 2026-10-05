@@ -1,0 +1,8 @@
+{
+  "name": "cn-converter",
+  "version": "1.0.0",
+  "description": "Convert Simplified Chinese prompts to Taiwan Traditional Chinese before sending, and render Claude replies as Mainland Simplified Chinese.",
+  "author": {
+    "name": "chixin114514"
+  }
+}
