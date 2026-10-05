@@ -79,34 +79,24 @@ function convertMarkdownAware(text: string, convert: Converter): string {
 }
 
 export const register: Register = (on) => {
-  on('session.start', async ($, event, next) => {
-    await $.command
-      .register({
-        name: 'cn-converter',
-        description: 'Show Claude CN Converter status and a local conversion test',
-      })
-      .catch(() => undefined)
-
-    return next(event)
-  })
-
-  on('command.run', { command: 'cn-converter' }, () => {
-    const simplified = '忧郁的乌龟；软件；网络连接；代码'
-    const traditional = toTaiwanTraditional(simplified)
-    const roundTrip = toMainlandSimplified(traditional)
-
-    return {
-      text:
-        'Claude CN Converter 1.0.2 loaded\n' +
-        'S → TW: ' + traditional + '\n' +
-        'TW → S: ' + roundTrip,
-    }
-  })
-
   on('prompt.submit', ($, event, next) => {
     // Do not rewrite prompts generated internally by another plugin.
     if (event.origin.kind === 'plugin') {
       return next(event)
+    }
+
+    // Deterministic local self-test. This never reaches the model.
+    if (event.text.trim() === 'cn-converter-test') {
+      const simplified = '忧郁的乌龟；软件；网络连接；代码'
+      const traditional = toTaiwanTraditional(simplified)
+      const roundTrip = toMainlandSimplified(traditional)
+
+      return {
+        drop:
+          'Claude CN Converter 1.0.3 loaded\n' +
+          'S → TW: ' + traditional + '\n' +
+          'TW → S: ' + roundTrip,
+      }
     }
 
     const converted = convertMarkdownAware(event.text, toTaiwanTraditional)
