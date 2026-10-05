@@ -1,12 +1,16 @@
 import {
   CJK as S2T_CJK,
-  ST_PHRASES,
   ST_PHRASES_REGIONAL,
   ST_CHARS,
   TW_PHRASES,
   TW_VARIANT_PHRASES,
   TW_VARIANTS,
-} from './opencc-s2t-data'
+} from './opencc-s2t-small-data'
+import { ST_PHRASES_1 } from './opencc-s2t-st-phrases-01'
+import { ST_PHRASES_2 } from './opencc-s2t-st-phrases-02'
+import { ST_PHRASES_3 } from './opencc-s2t-st-phrases-03'
+import { ST_PHRASES_4 } from './opencc-s2t-st-phrases-04'
+import { ST_PHRASES_5 } from './opencc-s2t-st-phrases-05'
 
 import {
   CJK as T2S_CJK,
@@ -140,7 +144,15 @@ function makeStage(...dicts: string[]): Trie {
 }
 
 const s2tNormalize = makeStage(S2T_CJK)
-const s2tStage1 = makeStage(ST_PHRASES, ST_PHRASES_REGIONAL, ST_CHARS)
+const s2tStage1 = makeStage(
+  ST_PHRASES_1,
+  ST_PHRASES_2,
+  ST_PHRASES_3,
+  ST_PHRASES_4,
+  ST_PHRASES_5,
+  ST_PHRASES_REGIONAL,
+  ST_CHARS,
+)
 const s2tStage2 = makeStage(TW_PHRASES, TW_VARIANT_PHRASES, TW_VARIANTS)
 
 const t2sNormalize = makeStage(T2S_CJK)
