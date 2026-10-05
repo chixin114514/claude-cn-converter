@@ -7,10 +7,12 @@
 - **Claude Code Plugin / Mod**：用于 Claude Code 终端。
 - **Tampermonkey Userscript**：用于 `claude.ai` 网页版。
 
-转换由 [opencc-js](https://github.com/nk2028/opencc-js) 完成：
+转换逻辑基于 OpenCC：
 
-- 发送：`cn -> twp`，大陆简体 → 台湾繁体，并转换常用词汇。
-- 显示：`twp -> cn`，台湾繁体及词汇 → 大陆简体。
+- 网页版使用 [opencc-js](https://github.com/nk2028/opencc-js)。
+- Claude Code Mod 由于运行在无 Node.js、无网络的隔离环境中，内置 [opencc-data](https://github.com/nk2028/opencc-data) 词典并使用本地 Trie 转换器，不依赖 `node_modules`。
+- 发送：大陆简体 → 台湾繁体，并转换台湾常用词汇。
+- 显示：台湾繁体及词汇 → 大陆简体。
 
 ---
 
@@ -89,6 +91,37 @@ claude plugin install cn-converter@chixin-plugins
 
 安装完成后无需额外命令，转换会自动生效。
 
+插件提供本地自检命令：
+
+```text
+/cn-converter
+```
+
+正常情况下会看到类似：
+
+```text
+Claude CN Converter 1.0.2 loaded
+S → TW: 憂鬱的烏龜；軟體；網路連線；程式碼
+TW → S: 忧郁的乌龟；软件；网络连接；代码
+```
+
+这个命令完全在插件本地执行，不经过 Claude 模型，因此比让模型“逐字复述”更适合判断插件是否真正加载。
+
+### 更新已安装插件
+
+如果你已经安装过旧版，先刷新 marketplace，再更新插件：
+
+```bash
+claude plugin marketplace update chixin-plugins
+claude plugin update cn-converter@chixin-plugins
+```
+
+然后重新启动 Claude Code，或在当前会话执行：
+
+```text
+/reload-plugins
+```
+
 也可以在 Claude Code 会话内执行：
 
 ```text
@@ -123,12 +156,16 @@ plugins/
     │   └── plugin.json
     ├── hooks/
     │   ├── hooks.json
-    │   └── register.ts
-    ├── package.json
-    └── package-lock.json
+    │   ├── register.ts
+    │   ├── opencc.ts
+    │   ├── opencc-s2t-data.ts
+    │   └── opencc-t2s-data.ts
+    ├── LICENSES/
+    │   └── Apache-2.0.txt
+    └── THIRD_PARTY_NOTICES.md
 ```
 
-`opencc-js` 固定为 `1.4.2`，由插件依赖安装机制加载。
+Claude Code 版本不依赖 npm 包；转换代码和 OpenCC 词典都随插件一起加载。
 
 ### 一个例子
 
@@ -190,4 +227,6 @@ claude-cn-converter.user.js
 
 ## License
 
-MIT
+本项目自有代码使用 MIT License。
+
+Claude Code 插件内置的 OpenCC 词典数据来自 `nk2028/opencc-data` / `BYVoid/OpenCC`，按 Apache License 2.0 使用，详见 `plugins/cn-converter/THIRD_PARTY_NOTICES.md`。
