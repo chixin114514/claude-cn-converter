@@ -100,7 +100,7 @@ cn-converter-test
 不要加 `/`。如果 Function Hook 已经加载，这条文本不会发送给 Claude 模型，而是直接返回：
 
 ```text
-Claude CN Converter 1.0.3 loaded
+Claude CN Converter 1.0.4 loaded
 S → TW: 憂鬱的烏龜；軟體；網路連線；程式碼
 TW → S: 忧郁的乌龟；软件；网络连接；代码
 ```
