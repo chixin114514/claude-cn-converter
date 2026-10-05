@@ -1,9 +1,0 @@
-{
-  "name": "cn-converter-claude-plugin",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "dependencies": {
-    "opencc-js": "1.4.2"
-  }
-}
