@@ -1,6 +1,6 @@
 {
   "name": "cn-converter",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Convert Simplified Chinese prompts to Taiwan Traditional Chinese before sending, and render Claude replies as Mainland Simplified Chinese. Self-contained; no Node runtime dependency.",
   "author": {
     "name": "chixin114514"
